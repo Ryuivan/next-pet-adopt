@@ -2,7 +2,7 @@
 
 import { useThemeContext } from "@/context/ThemeContext";
 import { DarkMode, LightMode } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 
 const ToggleMode = () => {
   const { mode, toggleColorMode } = useThemeContext();
@@ -12,9 +12,9 @@ const ToggleMode = () => {
   };
 
   return (
-    <Button onClick={handleToggle}>
+    <IconButton onClick={handleToggle}>
       {mode === "light" ? <LightMode /> : <DarkMode />}
-    </Button>
+    </IconButton>
   );
 };
 

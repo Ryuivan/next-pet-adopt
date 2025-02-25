@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ChildrenType } from "@/types/ChildrenType";
-import { Container, CssBaseline } from "@mui/material";
+import { Container } from "@mui/material";
 import Header from "@/components/ui/header/Header";
 import { ThemeContextProvider } from "@/context/ThemeContext";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,18 @@ export default function RootLayout({ children }: Readonly<ChildrenType>) {
         <ThemeContextProvider>
           <Header />
           <Container maxWidth="xl">{children}</Container>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss={false}
+            draggable
+            pauseOnHover={false}
+            transition={Bounce}
+          />
         </ThemeContextProvider>
       </body>
     </html>

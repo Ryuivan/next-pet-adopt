@@ -1,6 +1,6 @@
 "use client";
 
-import { PaletteMode, } from "@mui/material";
+import { PaletteMode } from "@mui/material";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { grey } from "@mui/material/colors";
 
@@ -20,8 +20,8 @@ export const getDesignTokens = (mode: PaletteMode) => ({
           },
           background: {
             default: "#F7F7F7",
-            primary: grey[300],
-            paper: grey[50],
+            primary: grey[100],
+            paper: grey[300],
           },
           text: {
             primary: "#252627",
@@ -30,14 +30,16 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         }
       : {
           // palette values for dark mode
-          primary: grey,
+          primary: {
+            main: "#9088E4",
+          },
           background: {
             default: "#121212",
             paper: grey[900],
           },
           text: {
             primary: "#f1f1f1",
-            secondary: grey[300],
+            secondary: "#9088E4",
           },
         }),
   },

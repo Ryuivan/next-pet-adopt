@@ -9,7 +9,7 @@ const Header = () => {
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: "background.paper",
+        backgroundColor: "background.primary",
       }}
     >
       <Container maxWidth="xl">
@@ -23,14 +23,14 @@ const Header = () => {
               paddingY: "16px",
             }}
           >
-            {/* <Logo /> */}
+            {/* Logo */}
             <Stack justifyContent="flex-start">
               <Link href="/" passHref>
                 <Logo width="150px" height="50px" />
               </Link>
             </Stack>
 
-            {/* <Search /> */}
+            {/* Route */}
             <Stack
               direction="row"
               alignItems="center"
@@ -41,10 +41,11 @@ const Header = () => {
               <HeaderRoute />
             </Stack>
 
-            {/* <UserMenu /> */}
-            <Stack justifyContent="flex-end" flex={1}>
+            {/* UserMenu */}
+            <Stack direction="row" justifyContent="flex-end" flex={1}>
               <ToggleMode />
             </Stack>
+
           </Stack>
         </Toolbar>
       </Container>
