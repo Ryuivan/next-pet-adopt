@@ -2,30 +2,19 @@
 
 import { useThemeContext } from "@/context/ThemeContext";
 import { DarkMode, LightMode } from "@mui/icons-material";
-import { Button, PaletteMode } from "@mui/material";
-import { useState } from "react";
+import { Button } from "@mui/material";
 
 const ToggleMode = () => {
   const { mode, toggleColorMode } = useThemeContext();
-  const [colorMode, setColorMode] = useState<PaletteMode>(mode);
 
-  const handleToggle = (newMode: PaletteMode) => {
-    toggleColorMode(newMode);
-    setColorMode(newMode);
+  const handleToggle = () => {
+    toggleColorMode(mode === "light" ? "dark" : "light");
   };
 
   return (
-    <>
-      {colorMode === "light" ? (
-        <Button onClick={() => handleToggle("dark")}>
-          <LightMode />
-        </Button>
-      ) : (
-        <Button onClick={() => handleToggle("light")}>
-          <DarkMode />
-        </Button>
-      )}
-    </>
+    <Button onClick={handleToggle}>
+      {mode === "light" ? <LightMode /> : <DarkMode />}
+    </Button>
   );
 };
 

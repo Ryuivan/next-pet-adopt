@@ -6,36 +6,34 @@ import { getDesignTokens } from "@/utils/mui/theme";
 
 const useColorTheme = () => {
   const [mode, setMode] = useState<PaletteMode>("light");
+  const [isHydrated, setIsHydrated] = useState(false); // Hydration check
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedMode = localStorage.getItem("themeMode") as PaletteMode;
-      if (storedMode) {
-        setMode(storedMode);
-      }
+      const storedMode = (localStorage.getItem("themeMode") as PaletteMode) || "light";
+      setMode(storedMode);
+      setIsHydrated(true);
     }
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (isHydrated) {
       localStorage.setItem("themeMode", mode);
     }
-  }, [mode]);
+  }, [mode, isHydrated]);
 
   const toggleColorMode = (newMode: PaletteMode) => {
     setMode(newMode);
     localStorage.setItem("themeMode", newMode);
   };
 
-  const modifiedTheme = useMemo(
-    () => createTheme(getDesignTokens(mode)),
-    [mode]
-  );
+  const modifiedTheme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return {
     theme: modifiedTheme,
     mode,
     toggleColorMode,
+    isHydrated,
   };
 };
 

@@ -18,7 +18,6 @@ export default function RootLayout({ children }: Readonly<ChildrenType>) {
     <html lang="en">
       <body className={inter.className}>
         <ThemeContextProvider>
-          <CssBaseline />
           <Header />
           <Container maxWidth="xl">{children}</Container>
         </ThemeContextProvider>

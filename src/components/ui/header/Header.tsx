@@ -2,6 +2,7 @@ import { AppBar, Box, Container, Stack, Toolbar } from "@mui/material";
 import Logo from "../logo/Logo";
 import HeaderRoute from "./HeaderRoute";
 import ToggleMode from "../themeMode/ToggleMode";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -24,7 +25,9 @@ const Header = () => {
           >
             {/* <Logo /> */}
             <Stack justifyContent="flex-start">
-              <Logo width="150px" height="50px" />
+              <Link href="/" passHref>
+                <Logo width="150px" height="50px" />
+              </Link>
             </Stack>
 
             {/* <Search /> */}
