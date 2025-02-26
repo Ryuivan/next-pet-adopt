@@ -2,7 +2,7 @@
 
 import { useThemeContext } from "@/context/ThemeContext";
 import { DarkMode, LightMode } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 
 const ToggleMode = () => {
   const { mode, toggleColorMode } = useThemeContext();
@@ -12,9 +12,11 @@ const ToggleMode = () => {
   };
 
   return (
-    <IconButton onClick={handleToggle}>
-      {mode === "light" ? <LightMode /> : <DarkMode />}
-    </IconButton>
+    <Tooltip title={`Switch to ${mode === "light" ? "dark" : "light"} mode`}>
+      <IconButton onClick={handleToggle}>
+        {mode === "light" ? <LightMode /> : <DarkMode />}
+      </IconButton>
+    </Tooltip>
   );
 };
 

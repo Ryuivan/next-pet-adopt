@@ -3,8 +3,16 @@ import Logo from "../logo/Logo";
 import HeaderRoute from "./HeaderRoute";
 import ToggleMode from "../themeMode/ToggleMode";
 import Link from "next/link";
+import { createClient } from "@/utils/supabase/server";
+import LoginButton from "@/components/login/LoginButton";
+import UserMenu from "./UserMenu";
 
-const Header = () => {
+const Header = async () => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <AppBar
       position="fixed"
@@ -42,10 +50,19 @@ const Header = () => {
             </Stack>
 
             {/* UserMenu */}
-            <Stack direction="row" justifyContent="flex-end" flex={1}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              flex={1}
+              spacing={2}
+            >
               <ToggleMode />
+              {user ? (
+                <UserMenu username={user.user_metadata.username} role={user.role as "user" | "admin"} />
+              ) : (
+                <LoginButton />
+              )}
             </Stack>
-
           </Stack>
         </Toolbar>
       </Container>

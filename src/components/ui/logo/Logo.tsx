@@ -11,7 +11,6 @@ type LogoProps = {
 
 const Logo = ({ width, height }: LogoProps) => {
   const { mode } = useThemeContext();
-  console.log(mode)
 
   return (
     <Box
