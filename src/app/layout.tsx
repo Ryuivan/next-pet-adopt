@@ -20,7 +20,7 @@ export default function RootLayout({ children }: Readonly<ChildrenType>) {
       <body className={inter.className}>
         <ThemeContextProvider>
           <Header />
-          <Container maxWidth="xl">{children}</Container>
+          {children}
           <ToastContainer
             position="top-right"
             autoClose={5000}

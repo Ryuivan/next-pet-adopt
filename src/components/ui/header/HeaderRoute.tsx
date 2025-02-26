@@ -1,13 +1,9 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material";
+import { RouteType } from "@/types/RouteType";
+import {  Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-type RouteType = {
-  name: string;
-  href: string;
-};
 
 const routes: RouteType[] = [
   {
@@ -24,9 +20,13 @@ const HeaderRoute = () => {
     <>
       {routes.map(({ name, href }: RouteType) => (
         <Link href={href} key={name}>
-          <Button variant="text" size="small" sx={{ 
-            padding: "8px 12px"
-           }}>
+          <Button
+            variant="text"
+            size="small"
+            sx={{
+              padding: "8px 12px",
+            }}
+          >
             <Typography
               color={pathname === href ? "text.secondary" : "text.primary"}
               fontWeight={600}

@@ -12,7 +12,6 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
-  Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -76,6 +75,7 @@ const UserMenu = ({ username, role }: UserMenuProps) => {
               overflow: "visible",
               filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
               mt: 1.5,
+              minWidth: 150, // Ubah lebar menu di sini
               "& .MuiAvatar-root": {
                 width: 32,
                 height: 32,
@@ -101,8 +101,8 @@ const UserMenu = ({ username, role }: UserMenuProps) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         {role === "admin" && (
-          <MenuItem onClick={handleClose}>
-            <Link href="/dashboard" passHref>
+          <Link href="/dashboard" passHref>
+            <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <Dashboard />
               </ListItemIcon>
@@ -110,8 +110,8 @@ const UserMenu = ({ username, role }: UserMenuProps) => {
               <Typography fontSize="14px" fontWeight={500}>
                 Dashboard
               </Typography>
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          </Link>
         )}
 
         <Link href={`/profile/${username}`} passHref>

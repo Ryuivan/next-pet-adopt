@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 export default function Home() {
   return (
-    <Box color="text.primary">
+    <Container maxWidth="xl" className="with-header">
     Hello World
-    </Box>
+    </Container>
   );
 }
