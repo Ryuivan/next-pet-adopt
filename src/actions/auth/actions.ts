@@ -1,16 +1,17 @@
 "use server";
 
+import { ForgotPasswordUserCredentials } from "@/types/auth/ForgotPasswordUserCredentials";
 import { LoginUserCredentials } from "@/types/auth/LoginUserCredentials";
 import { RegisterUserCredentials } from "@/types/auth/RegisterUserCredentials";
 import { User } from "@/types/model/User";
 import { createClient } from "@/utils/supabase/server";
+import { ForgotPasswordFormSchema } from "@/utils/zod/ForgotPasswordFormSchema";
 import { LoginFormSchema } from "@/utils/zod/LoginFormSchema";
 import { RegisterFormSchema } from "@/utils/zod/RegisterFormSchema";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 
-export const registerUser = async (
-  credentials: RegisterUserCredentials
-): Promise<{ success: boolean; message: string; user?: User }> => {
+export const registerUser = async (credentials: RegisterUserCredentials) => {
   try {
     const supabase = await createClient();
 
@@ -133,4 +134,62 @@ export const getUserSession = async () => {
     success: true,
     user: data?.user,
   };
+};
+
+export const forgotPassword = async (
+  credentials: ForgotPasswordUserCredentials
+) => {
+  try {
+    const supabase = await createClient();
+    const origin = process.env.NEXT_PUBLIC_APP_URL;
+
+    const validCredentials = ForgotPasswordFormSchema.parse(credentials);
+    const { email } = validCredentials;
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${origin}/reset-password`,
+    });
+
+    if (error)
+      throw new Error(`Failed to send password reset: ${error.message}`);
+
+    return {
+      success: true,
+      message: "Password reset email sent",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
+export const resetPassword = async (credentials: string, code: string) => {
+  try {
+    const supabase = await createClient();
+
+    const { error: CodeError } = await supabase.auth.exchangeCodeForSession(
+      code
+    );
+
+    if (CodeError)
+      throw new Error(`Failed to reset password: ${CodeError.message}`);
+
+    const { error } = await supabase.auth.updateUser({
+      password: credentials,
+    });
+
+    if (error) throw new Error(`Failed to reset password: ${error.message}`);
+
+    return {
+      success: true,
+      message: "Password reset successful",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
 };

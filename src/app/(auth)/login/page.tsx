@@ -49,7 +49,7 @@ const LoginPage = () => {
         <Typography fontWeight={500} fontSize="14px">
           Forgot your password?
         </Typography>
-        <Link href="/reset-password" passHref>
+        <Link href="/forgot-password" passHref>
           <Typography
             color="text.primary"
             fontWeight={700}
