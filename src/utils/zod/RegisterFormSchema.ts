@@ -10,9 +10,15 @@ export const RegisterFormSchema = z.object({
       "Username can only contain letters, numbers, and underscores"
     ),
 
-  email: z.string().email("Invalid email address"),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .nonempty("Email is required"),
 
-  password: z.string().min(6, "Password must be at least 6 characters long"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .nonempty("Password is required"),
 });
 
 export type RegisterFormData = z.infer<typeof RegisterFormSchema>;

@@ -1,20 +1,17 @@
 "use client";
 
-import { registerUser } from "@/actions/auth/actions";
 import { useThemeContext } from "@/context/ThemeContext";
 import { MakeErrorToast, MakeSuccessToast } from "@/utils/toast/Toast";
-import {
-  RegisterFormSchema,
-  RegisterFormData,
-} from "@/utils/zod/RegisterFormSchema";
+import { LoginFormData, LoginFormSchema } from "@/utils/zod/LoginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import FormErrorMessage from "../ui/errors/FormErrorMessage";
+import { login } from "@/actions/auth/actions";
 
-const RegisterForm = () => {
+const LoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { mode } = useThemeContext();
   const { push } = useRouter();
@@ -22,22 +19,19 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(RegisterFormSchema),
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(LoginFormSchema),
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
 
     try {
-      const { success } = await registerUser(data);
-      if (!success) {
-        throw new Error("Failed to register user");
-      }
+      const { success } = await login(data);
+      if (!success) throw new Error("Login failed");
 
-      MakeSuccessToast("User registered successfully", mode);
-
-      push("/login");
+      MakeSuccessToast("Login successful", mode);
+      push("/");
     } catch (error) {
       MakeErrorToast(
         error instanceof Error ? error.message : "Error register user",
@@ -50,21 +44,7 @@ const RegisterForm = () => {
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
-      {/* Username Field */}
-      <FormControl fullWidth sx={{ marginBottom: "16px" }}>
-        <TextField
-          {...register("username")}
-          label="Username"
-          variant="filled"
-          fullWidth
-          error={!!errors.username}
-        />
-        {errors.username && (
-          <FormErrorMessage message={errors.username.message} />
-        )}
-      </FormControl>
-
-      {/* Email Field */}
+      {/* Email field */}
       <FormControl fullWidth sx={{ marginBottom: "16px" }}>
         <TextField
           {...register("email")}
@@ -76,7 +56,7 @@ const RegisterForm = () => {
         {errors.email && <FormErrorMessage message={errors.email.message} />}
       </FormControl>
 
-      {/* Password Field */}
+      {/* Password field */}
       <FormControl fullWidth sx={{ marginBottom: "16px" }}>
         <TextField
           {...register("password")}
@@ -93,10 +73,10 @@ const RegisterForm = () => {
 
       {/* Submit Button */}
       <Button type="submit" variant="contained" fullWidth loading={loading}>
-        Register
+        Login
       </Button>
     </Box>
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

@@ -1,10 +1,13 @@
 "use server";
 
+import { LoginUserCredentials } from "@/types/auth/LoginUserCredentials";
 import { RegisterUserCredentials } from "@/types/auth/RegisterUserCredentials";
 import { User } from "@/types/model/User";
 import { createClient } from "@/utils/supabase/server";
+import { LoginFormSchema } from "@/utils/zod/LoginFormSchema";
 import { RegisterFormSchema } from "@/utils/zod/RegisterFormSchema";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const registerUser = async (
   credentials: RegisterUserCredentials
@@ -64,6 +67,56 @@ export const registerUser = async (
         updated_at: new Date(),
       },
     };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
+export const login = async (credentials: LoginUserCredentials) => {
+  try {
+    const supabase = await createClient();
+
+    // Validate credentials
+    const validCredentials = LoginFormSchema.parse(credentials);
+    const { email, password } = validCredentials;
+
+    // Sign in user
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) throw new Error(`Failed to login: ${error.message}`);
+    if (!data.user) throw new Error("User login failed");
+
+    revalidatePath("/", "layout");
+
+    return {
+      success: true,
+      data: data.user,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
+export const logout = async () => {
+  try {
+    const supabase = await createClient();
+
+    // Sign out user
+    const { error } = await supabase.auth.signOut();
+
+    if (error) throw new Error(`Failed to logout: ${error.message}`);
+
+    revalidatePath("/", "layout");
+    redirect("/login");
   } catch (error) {
     return {
       success: false,
