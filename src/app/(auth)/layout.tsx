@@ -1,7 +1,12 @@
+import { getUserSession } from "@/actions/auth/actions";
 import { ChildrenType } from "@/types/ChildrenType";
-import { Container, Stack } from "@mui/material";
+import { Container } from "@mui/material";
+import { redirect } from "next/navigation";
 
-const AuthLayout = ({ children }: ChildrenType) => {
+const AuthLayout = async ({ children }: ChildrenType) => {
+  const response = await getUserSession()
+  if (response?.user) redirect("/") 
+  
   return (
     <Container
       maxWidth="md"

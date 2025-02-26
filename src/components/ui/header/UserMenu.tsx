@@ -1,7 +1,9 @@
 "use client";
 
 import { logout } from "@/actions/auth/actions";
+import { useThemeContext } from "@/context/ThemeContext";
 import { User } from "@/types/model/User";
+import { MakeSuccessToast } from "@/utils/toast/Toast";
 import { Logout, AccountCircleOutlined, Dashboard } from "@mui/icons-material";
 import {
   Avatar,
@@ -15,12 +17,15 @@ import {
   Typography,
 } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
 
 type UserMenuProps = Pick<User, "username" | "role">;
 
 const UserMenu = ({ username, role }: UserMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { push } = useRouter();
+  const { mode } = useThemeContext();
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -34,6 +39,9 @@ const UserMenu = ({ username, role }: UserMenuProps) => {
   const handleLogout = async () => {
     await logout();
     handleClose();
+
+    MakeSuccessToast("Logout successful", mode);
+    push("/login");
   };
 
   return (

@@ -7,7 +7,6 @@ import { createClient } from "@/utils/supabase/server";
 import { LoginFormSchema } from "@/utils/zod/LoginFormSchema";
 import { RegisterFormSchema } from "@/utils/zod/RegisterFormSchema";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export const registerUser = async (
   credentials: RegisterUserCredentials
@@ -116,11 +115,22 @@ export const logout = async () => {
     if (error) throw new Error(`Failed to logout: ${error.message}`);
 
     revalidatePath("/", "layout");
-    redirect("/login");
   } catch (error) {
     return {
       success: false,
       message: error instanceof Error ? error.message : "An error occurred",
     };
   }
+};
+
+export const getUserSession = async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) return null;
+
+  return {
+    success: true,
+    user: data?.user,
+  };
 };
