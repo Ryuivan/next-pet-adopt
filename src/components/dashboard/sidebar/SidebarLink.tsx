@@ -1,3 +1,5 @@
+"use client";
+
 import { RouteType } from "@/types/RouteType";
 import {
   ListItem,
@@ -6,15 +8,25 @@ import {
   ListItemText,
 } from "@mui/material";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type SidebarLinkProps = RouteType & {
   open: boolean;
 };
 
 const SidebarLink = ({ name, href, icon, open }: SidebarLinkProps) => {
+  const pathname = usePathname();
+
   return (
     <Link href={href} passHref>
-      <ListItem disablePadding sx={{ display: "block" }}>
+      <ListItem
+        disablePadding
+        sx={{
+          display: "block",
+          backgroundColor: pathname === href ? "primary.main" : "transparent",
+          color: pathname === href ? "white" : "inherit",
+        }}
+      >
         <ListItemButton
           sx={{
             minHeight: 48,
@@ -27,6 +39,7 @@ const SidebarLink = ({ name, href, icon, open }: SidebarLinkProps) => {
               minWidth: 0,
               justifyContent: "center",
               mr: open ? 3 : "auto",
+              color: "inherit",
             }}
           >
             {icon}

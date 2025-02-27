@@ -1,33 +1,10 @@
-"use server";
-
 import { createClient } from "@/utils/supabase/server";
 
-export const fetchUserData = async () => {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError || !user) return { user: null, role: null };
-
-  const { data: profile, error: profileError } = await supabase
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  return {
-    user,
-    role: profile?.role,
-  };
-};
-
-export const getTotalUsers = async (): Promise<number> => {
+export const getTotalPets = async (): Promise<number> => {
   try {
     const supabase = await createClient();
     const { count, error } = await supabase
-      .from("user_profiles")
+      .from("pets")
       .select("id", { count: "exact" });
 
     if (error) throw new Error(error.message);
@@ -38,7 +15,7 @@ export const getTotalUsers = async (): Promise<number> => {
   }
 };
 
-export const getMonthlyUsers = async (): Promise<number> => {
+export const getMonthlyPets = async (): Promise<number> => {
   try {
     const supabase = await createClient();
 
@@ -47,7 +24,7 @@ export const getMonthlyUsers = async (): Promise<number> => {
     startOfMonth.setHours(0, 0, 0, 0);
 
     const { data, error } = await supabase
-      .from("user_profiles")
+      .from("pets")
       .select("id")
       .gte("created_at", startOfMonth.toISOString());
 
@@ -55,7 +32,7 @@ export const getMonthlyUsers = async (): Promise<number> => {
 
     return data.length;
   } catch (error) {
-    console.error("Error fetching monthly users:", error);
+    console.error("Error fetching monthly pets:", error);
     return -1;
   }
 };
