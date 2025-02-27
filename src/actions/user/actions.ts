@@ -1,5 +1,6 @@
 "use server";
 
+import { User } from "@/types/model/User";
 import { createClient } from "@/utils/supabase/server";
 
 export const fetchUserData = async () => {
@@ -35,6 +36,24 @@ export const getTotalUsers = async (): Promise<number> => {
     return count ?? 0;
   } catch (error) {
     return -1;
+  }
+};
+
+export const getAllUsers = async (): Promise<User[] | null> => {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("user_profiles")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw new Error(error.message);
+
+    return data as User[];
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return null;
   }
 };
 
