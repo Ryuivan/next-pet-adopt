@@ -1,6 +1,6 @@
 import { getUserById } from "@/actions/user/actions";
+import UpdateUserDashboardForm from "@/components/dashboard/form/updateUser/UpdateUserDashboardForm";
 import FormTitle from "@/components/ui/title/FormTitle";
-import UpdateUserDashboardForm from "@/components/updateUser/UpdateUserDashboardForm";
 import { Container } from "@mui/material";
 
 type UserDashboardUpdatePageProps = {

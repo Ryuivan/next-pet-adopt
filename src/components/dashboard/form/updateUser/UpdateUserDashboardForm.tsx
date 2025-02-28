@@ -19,10 +19,10 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import FormErrorMessage from "../ui/errors/FormErrorMessage";
 import { User } from "@/types/model/User";
 import { updateUser } from "@/actions/user/actions";
 import { MakeErrorToast, MakeSuccessToast } from "@/utils/toast/Toast";
+import FormErrorMessage from "@/components/ui/errors/FormErrorMessage";
 
 type UpdateUserDashboardFormProps = {
   user: User | null;

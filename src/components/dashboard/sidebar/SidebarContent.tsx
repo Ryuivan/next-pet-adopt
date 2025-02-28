@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { ChevronLeft, Dashboard, Menu, Person } from "@mui/icons-material";
+import {
+  ChevronLeft,
+  Dashboard,
+  Menu,
+  Person,
+  Pets,
+} from "@mui/icons-material";
 import {
   Box,
   Divider,
@@ -12,7 +18,6 @@ import {
   Typography,
 } from "@mui/material";
 import { User } from "@supabase/supabase-js";
-
 import SideAppBar from "./SideAppBar";
 import SidebarDrawer from "./SidebarDrawer";
 import SidebarDrawerHeader from "./SidebarDrawerHeader";
@@ -38,6 +43,7 @@ const SidebarContent = ({ user, role, children }: SidebarContentProps) => {
   const routes: RouteType[] = [
     { name: "Dashboard", href: "/dashboard", icon: <Dashboard /> },
     { name: "Users", href: "/dashboard/users", icon: <Person /> },
+    { name: "Pets", href: "/dashboard/pets", icon: <Pets /> },
   ];
 
   return (
