@@ -57,6 +57,7 @@ const RegisterForm = () => {
           label="Username"
           variant="filled"
           fullWidth
+          
           error={!!errors.username}
         />
         {errors.username && (

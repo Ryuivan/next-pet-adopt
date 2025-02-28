@@ -13,6 +13,7 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
+import Link from "next/link";
 import { useState } from "react";
 
 type UserTableBodyProps = {
@@ -110,9 +111,11 @@ const UserTableBody = ({ users }: UserTableBodyProps) => {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <IconButton aria-label="edit" color="warning">
-                    <Edit />
-                  </IconButton>
+                  <Link href={`/dashboard/users/${user.id}/edit`} passHref>
+                    <IconButton aria-label="edit" color="warning">
+                      <Edit />
+                    </IconButton>
+                  </Link>
                   <IconButton
                     aria-label="delete"
                     color="error"

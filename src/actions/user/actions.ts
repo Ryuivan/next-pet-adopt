@@ -2,6 +2,7 @@
 
 import { User } from "@/types/model/User";
 import { createClient } from "@/utils/supabase/server";
+import { UpdateUserDashboardFormData } from "@/utils/zod/UpdateUserFormSchema";
 
 export const fetchUserData = async () => {
   const supabase = await createClient();
@@ -76,6 +77,47 @@ export const getMonthlyUsers = async (): Promise<number> => {
   } catch (error) {
     console.error("Error fetching monthly users:", error);
     return -1;
+  }
+};
+
+export const getUserById = async (id: string): Promise<User | null> => {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("user_profiles")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw new Error(error.message);
+
+    return data as User;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+};
+
+export const updateUser = async (user: Partial<User>): Promise<boolean> => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from("user_profiles")
+      .update({
+        username: user.username,
+        role: user.role,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", user.id);
+
+    if (error) throw new Error("Error updating user:", error);
+
+    return true;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return false;
   }
 };
 
