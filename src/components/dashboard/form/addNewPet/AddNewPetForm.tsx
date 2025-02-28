@@ -63,23 +63,24 @@ const AddNewPetForm = ({ userId }: AddNewPetFormProps) => {
     try {
       let imageUrl = null;
 
-      // Upload image dulu jika ada file
       if (data.image instanceof File) {
-        const { imageUrl: uploadedUrl, error } = await uploadImageToStorage(
-          data.image
-        );
+        const { imageUrl: uploadedUrl, error } = await uploadImageToStorage({
+          file: data.image,
+          bucket: "pets_pictures",
+          folder: data.species,
+        });
+        
         if (error) throw new Error(error);
         imageUrl = uploadedUrl;
       }
 
-      // Kirim data ke server tanpa instance class (pastikan hanya plain objects)
       const newPet = {
         ...data,
         added_by: userId,
         date_of_birth: data.date_of_birth
           ? new Date(data.date_of_birth)
           : undefined,
-        image: imageUrl || undefined, // URL string, bukan File
+        image: imageUrl || undefined,
       };
 
       const { success } = await createPet(newPet);

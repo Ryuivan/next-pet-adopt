@@ -2,8 +2,8 @@
 
 import { Pet } from "@/types/model/Pet";
 import { createClient } from "@/utils/supabase/server";
-import { uploadImageToStorage } from "@/utils/supabase/storage";
 import { getUserById } from "../user/actions";
+import { deleteImage } from "@/utils/supabase/storage";
 
 export const getTotalPets = async (): Promise<number> => {
   try {
@@ -101,6 +101,36 @@ export const createPet = async (
   }
 };
 
-export const deletePet = async (id: string): Promise<boolean> => {
-  return false;
+export const deletePet = async (pet: Pet): Promise<boolean> => {
+  try {
+    const supabase = await createClient();
+
+    if (pet.image && typeof pet.image === "string") {
+      const filePath = pet.image.split(
+        "/storage/v1/object/public/pets_picture/"
+      )[1];
+
+      if (!filePath) {
+        throw new Error("Invalid image URL format");
+      }
+
+      const { error } = await deleteImage({
+        pathname: filePath,
+        bucket: "pets_pictures",
+      });
+
+      if (error) throw new Error(error);
+    }
+
+    const { error } = await supabase
+      .from("pets")
+      .delete()
+      .match({ id: pet.id });
+    if (error) throw new Error(error.message);
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting pet:", error);
+    return false;
+  }
 };

@@ -1,8 +1,10 @@
 import { createClient } from "./client";
+import { createServiceClient } from "./service";
 
 type ImageStorageProps = {
   file: File;
   bucket: string;
+  pathname?: string;
   folder?: string;
 };
 
@@ -14,43 +16,54 @@ const getStorage = () => {
 
 export const getImageFromStorage = async ({}) => {};
 
-
-export const uploadImageToStorage = async (file: File) => {
+export const uploadImageToStorage = async ({
+  file,
+  bucket,
+  folder,
+}: ImageStorageProps) => {
   try {
     const supabase = createClient();
 
     const fileExt = file.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `pets_picture/${fileName}`;
+    const filePath = `${folder ? folder + "/" : ""}${fileName}`;
 
     const { data, error } = await supabase.storage
-      .from("pets_picture")
+      .from(bucket)
       .upload(filePath, file);
 
     if (error) throw new Error(error.message);
 
     // Dapatkan URL publik
     const { data: publicURL } = supabase.storage
-      .from("pets_picture")
+      .from(bucket)
       .getPublicUrl(filePath);
 
     return { imageUrl: publicURL.publicUrl, error: null };
   } catch (error) {
     console.error(error);
-    return { imageUrl: null, error: error instanceof Error ? error.message : "Upload failed" };
+    return {
+      imageUrl: null,
+      error: error instanceof Error ? error.message : "Upload failed",
+    };
   }
 };
 
 export const deleteImage = async ({
-  file,
   bucket,
+  pathname,
   folder,
-}: ImageStorageProps) => {
-  const storage = getStorage();
+}: Partial<ImageStorageProps>) => {
+  const supabase = await createServiceClient()
 
-  const path = `${folder ? folder + "/" : ""}${file}`;
+  if (!bucket) {
+    console.error("Bucket name is required");
+    return { message: null, error: "Image upload failed" };
+  }
 
-  const { error } = await storage.from(bucket).remove([path]);
+  const path = `${folder ? folder + "/" : ""}${pathname}`;
+
+  const { error } = await supabase.storage.from(bucket).remove([path]);
 
   if (error) {
     console.error("Error deleting image: ", error);

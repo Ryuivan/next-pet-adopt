@@ -39,7 +39,7 @@ const PetTableBody = ({ pets }: PetTableBodyProps) => {
 
   const handleDeletePet = async () => {
     if (selectedPet) {
-      const success = await deletePet(selectedPet.id);
+      const success = await deletePet(selectedPet);
       if (success) {
         MakeSuccessToast("Pet deleted successfully", mode);
       } else {
