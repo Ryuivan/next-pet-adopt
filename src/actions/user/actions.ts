@@ -78,3 +78,24 @@ export const getMonthlyUsers = async (): Promise<number> => {
     return -1;
   }
 };
+
+export const deleteUser = async (id: string): Promise<boolean> => {
+  try {
+    const supabase = await createClient();
+
+    // const { error: profileError } = await supabase
+    //   .from("user_profiles")
+    //   .delete()
+    //   .eq("id", id);
+    // if (profileError) throw new Error(profileError.message);
+
+    const { error: authError } = await supabase.auth.admin.deleteUser(id);
+    console.log("authError", authError);
+    if (authError) throw new Error(authError.message);
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return false;
+  }
+};

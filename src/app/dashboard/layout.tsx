@@ -10,12 +10,7 @@ const DashboardPagesLayout = async ({ children }: ChildrenType) => {
     redirect("/");
   }
 
-  return (
-    <Sidebar>
-      {children}
-      
-    </Sidebar>
-  );
+  return <Sidebar>{children}</Sidebar>;
 };
 
 export default DashboardPagesLayout;

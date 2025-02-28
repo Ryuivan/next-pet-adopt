@@ -2,18 +2,10 @@ import MonthlyPetsCard from "@/components/dashboard/card/monthlyPets/MonthlyPets
 import MonthlyUsersCard from "@/components/dashboard/card/monthlyUsers/MonthlyUsersCard";
 import TotalPetsCard from "@/components/dashboard/card/totalPets/TotalPetsCard";
 import TotalUsersCard from "@/components/dashboard/card/totalUsers/TotalUsersCard";
-import { Person } from "@mui/icons-material";
 import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
   Grid2,
   Skeleton,
   Stack,
-  Typography,
 } from "@mui/material";
 import { Suspense } from "react";
 

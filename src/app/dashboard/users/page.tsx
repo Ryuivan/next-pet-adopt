@@ -8,7 +8,7 @@ const UsersDashboardPage = () => {
     <Box>
       <DashboardPageTitle title="User List" />
       <Suspense
-        fallback={<Skeleton variant="rectangular" width="100%" height="100%" />}
+        fallback={<Skeleton variant="rectangular" width="100%" height="80vh" />}
       >
         <UserTable />
       </Suspense>
