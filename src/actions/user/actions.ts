@@ -2,6 +2,7 @@
 
 import { User } from "@/types/model/User";
 import { createClient } from "@/utils/supabase/server";
+import { createServiceClient } from "@/utils/supabase/service";
 import { UpdateUserDashboardFormData } from "@/utils/zod/UpdateUserFormSchema";
 
 export const fetchUserData = async () => {
@@ -123,13 +124,13 @@ export const updateUser = async (user: Partial<User>): Promise<boolean> => {
 
 export const deleteUser = async (id: string): Promise<boolean> => {
   try {
-    const supabase = await createClient();
+    const supabase = await createServiceClient();
 
-    // const { error: profileError } = await supabase
-    //   .from("user_profiles")
-    //   .delete()
-    //   .eq("id", id);
-    // if (profileError) throw new Error(profileError.message);
+    const { error: profileError } = await supabase
+      .from("user_profiles")
+      .delete()
+      .eq("id", id);
+    if (profileError) throw new Error(profileError.message);
 
     const { error: authError } = await supabase.auth.admin.deleteUser(id);
     console.log("authError", authError);
