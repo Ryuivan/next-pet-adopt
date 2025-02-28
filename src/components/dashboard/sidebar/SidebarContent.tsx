@@ -108,7 +108,7 @@ const SidebarContent = ({ user, role, children }: SidebarContentProps) => {
       </SidebarDrawer>
 
       {/* Main Content */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Box sx={{ flexGrow: 1, p: 3, maxWidth: `calc(100vw)` }}>
         <SidebarDrawerHeader />
         {children}
       </Box>

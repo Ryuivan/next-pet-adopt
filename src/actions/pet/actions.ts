@@ -3,6 +3,7 @@
 import { Pet } from "@/types/model/Pet";
 import { createClient } from "@/utils/supabase/server";
 import { uploadImageToStorage } from "@/utils/supabase/storage";
+import { getUserById } from "../user/actions";
 
 export const getTotalPets = async (): Promise<number> => {
   try {
@@ -23,14 +24,19 @@ export const getMonthlyPets = async (): Promise<number> => {
   try {
     const supabase = await createClient();
 
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
+    const now = new Date();
+    const startOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0)
+    );
+    const startOfNextMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1, 0, 0, 0, 0)
+    );
 
     const { data, error } = await supabase
       .from("pets")
       .select("id")
-      .gte("created_at", startOfMonth.toISOString());
+      .gte("created_at", startOfMonth.toISOString())
+      .lt("created_at", startOfNextMonth.toISOString());
 
     if (error) throw new Error(error.message);
 
@@ -59,36 +65,33 @@ export const getAllPets = async (): Promise<Pet[] | null> => {
   }
 };
 
+export const getAllPetsAndUsername = async () => {
+  const pets = await getAllPets();
+
+  if (!pets) {
+    return [];
+  }
+
+  return Promise.all(
+    pets.map(async (pet) => {
+      const user = pet?.added_by ? await getUserById(pet.added_by) : null;
+
+      return { ...pet, added_by: user?.username };
+    })
+  );
+};
+
 export const createPet = async (
   petData: Omit<Pet, "id" | "created_at" | "updated_at">
 ) => {
   try {
     const supabase = await createClient();
 
-    let imageUrl;
-
-    if (petData.image instanceof File) {
-      const { imageUrl: uploadedUrl, error } = await uploadImageToStorage(
-        petData.image
-      );
-
-      if (error) {
-        throw new Error(error);
-      }
-
-      imageUrl = uploadedUrl;
-    }
-
-    const newPet = {
-      ...petData,
-      image: imageUrl || undefined,
-    };
-
-    const { data, error } = await supabase.from("pets").insert(newPet);
+    const { data, error } = await supabase.from("pets").insert(petData);
 
     if (error) throw new Error(error.message);
 
-    return { success: true, data: data };
+    return { success: true, data };
   } catch (error) {
     console.error(error);
     return {
@@ -96,4 +99,8 @@ export const createPet = async (
       error: error instanceof Error ? error.message : "Unknown error",
     };
   }
+};
+
+export const deletePet = async (id: string): Promise<boolean> => {
+  return false;
 };

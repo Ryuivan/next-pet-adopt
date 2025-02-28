@@ -63,20 +63,25 @@ export const getMonthlyUsers = async (): Promise<number> => {
   try {
     const supabase = await createClient();
 
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
+    const now = new Date();
+    const startOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0)
+    );
+    const startOfNextMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1, 0, 0, 0, 0)
+    );
 
     const { data, error } = await supabase
       .from("user_profiles")
       .select("id")
-      .gte("created_at", startOfMonth.toISOString());
+      .gte("created_at", startOfMonth.toISOString())
+      .lt("created_at", startOfNextMonth.toISOString());
 
     if (error) throw new Error(error.message);
 
     return data.length;
   } catch (error) {
-    console.error("Error fetching monthly users:", error);
+    console.error("Error fetching monthly user:", error);
     return -1;
   }
 };

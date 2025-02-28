@@ -61,18 +61,32 @@ const AddNewPetForm = ({ userId }: AddNewPetFormProps) => {
     setLoading(true);
 
     try {
+      let imageUrl = null;
+
+      // Upload image dulu jika ada file
+      if (data.image instanceof File) {
+        const { imageUrl: uploadedUrl, error } = await uploadImageToStorage(
+          data.image
+        );
+        if (error) throw new Error(error);
+        imageUrl = uploadedUrl;
+      }
+
+      // Kirim data ke server tanpa instance class (pastikan hanya plain objects)
       const newPet = {
         ...data,
         added_by: userId,
         date_of_birth: data.date_of_birth
           ? new Date(data.date_of_birth)
           : undefined,
+        image: imageUrl || undefined, // URL string, bukan File
       };
 
       const { success } = await createPet(newPet);
       if (!success) throw new Error("Failed to add new pet");
 
       MakeSuccessToast("Pet added successfully", mode);
+      push("/dashboard/pets");
     } catch (error) {
       console.error(error);
       MakeErrorToast(

@@ -1,18 +1,26 @@
 import { ChildrenType } from "@/types/ChildrenType";
-import { Paper, Table, TableContainer } from "@mui/material";
+import { Box, Paper, Table, TableContainer } from "@mui/material";
 
 const DashboardTableContainer = ({ children }: ChildrenType) => {
   return (
-    <TableContainer component={Paper}>
-      <Table
-        sx={{
-          minWidth: "650px",
-        }}
-        aria-label="Table"
-      >
-        {children}
-      </Table>
-    </TableContainer>
+    <Box
+      sx={{
+        width: "100%",
+        overflowX: "auto",
+        maxWidth: "100vw",
+      }}
+    >
+      <TableContainer component={Paper}>
+        <Table
+          sx={{
+            minWidth: "650px",
+          }}
+          aria-label="Table"
+        >
+          {children}
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 

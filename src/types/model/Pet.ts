@@ -8,7 +8,7 @@ export type Pet = {
   age: number;
   date_of_birth?: Date;
   owner_id?: string;
-  added_by: string;
+  added_by?: string;
   created_at?: Date;
   updated_at?: Date;
 };

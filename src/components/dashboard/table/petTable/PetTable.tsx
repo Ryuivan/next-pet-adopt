@@ -1,16 +1,15 @@
-import { Stack } from "@mui/material";
 import DashboardTableContainer from "../DashboardTableContainer";
 import PetTableHead from "./PetTableHead";
-// import UserTableBody from "./UserTableBody";
-import { getAllPets } from "@/actions/pet/actions";
+import { getAllPetsAndUsername } from "@/actions/pet/actions";
+import PetTableBody from "./PetTableBody";
 
 const PetTable = async () => {
-  const pets = await getAllPets();
+  const pets = await getAllPetsAndUsername();
 
   return (
     <DashboardTableContainer>
       <PetTableHead />
-      {/* <UserTableBody users={users} /> */}
+      <PetTableBody pets={pets} />
     </DashboardTableContainer>
   );
 };
