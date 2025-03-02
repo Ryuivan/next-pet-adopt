@@ -34,7 +34,6 @@ export const uploadImageToStorage = async ({
 
     if (error) throw new Error(error.message);
 
-    // Dapatkan URL publik
     const { data: publicURL } = supabase.storage
       .from(bucket)
       .getPublicUrl(filePath);
@@ -54,7 +53,7 @@ export const deleteImage = async ({
   pathname,
   folder,
 }: Partial<ImageStorageProps>) => {
-  const supabase = await createServiceClient()
+  const supabase = await createServiceClient();
 
   if (!bucket) {
     console.error("Bucket name is required");

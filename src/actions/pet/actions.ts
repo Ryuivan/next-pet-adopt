@@ -81,6 +81,25 @@ export const getAllPetsAndUsername = async () => {
   );
 };
 
+export const getPetById = async (id: string): Promise<Pet | null> => {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("pets")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw new Error(error.message);
+
+    return data as Pet;
+  } catch (error) {
+    console.error("Error fetching pet:", error);
+    return null;
+  }
+};
+
 export const createPet = async (
   petData: Omit<Pet, "id" | "created_at" | "updated_at">
 ) => {
@@ -98,6 +117,33 @@ export const createPet = async (
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
     };
+  }
+};
+
+export const updatePet = async (pet: Partial<Pet>): Promise<boolean> => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from("pets")
+      .update({
+        name: pet.name,
+        image: pet.image,
+        species: pet.species,
+        breed: pet.breed,
+        gender: pet.gender,
+        age: pet.age,
+        date_of_birth: pet.date_of_birth,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", pet.id);
+
+    if (error) throw new Error("Error updating pet:", error);
+
+    return true;
+  } catch (error) {
+    console.error("Error updating pet:", error);
+    return false;
   }
 };
 

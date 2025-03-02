@@ -185,7 +185,7 @@ const PetTableBody = ({ pets }: PetTableBodyProps) => {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <Link href={`/dashboard/users/${pet.id}/edit`} passHref>
+                  <Link href={`/dashboard/pets/${pet.id}/edit`} passHref>
                     <IconButton aria-label="edit" color="warning">
                       <Edit />
                     </IconButton>
