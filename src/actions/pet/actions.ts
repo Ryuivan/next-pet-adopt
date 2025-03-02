@@ -110,6 +110,35 @@ export const getPetById = async (id: string): Promise<Pet | null> => {
   }
 };
 
+export const getPetsWithPagination = async (
+  query?: string,
+  page: number = 1,
+  limit: number = 8
+): Promise<{ pets: Pet[]; total: number }> => {
+  try {
+    const supabase = await createClient();
+
+    const start = (page - 1) * limit;
+    const end = start + limit - 1;
+
+    const { data, error, count } = await supabase
+      .from("pets")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(start, end);
+
+    if (error) throw new Error(error.message);
+
+    return {
+      pets: data as Pet[],
+      total: count ?? 0,
+    };
+  } catch (error) {
+    console.error("Error fetching pets with pagination:", error);
+    return { pets: [], total: 0 };
+  }
+};
+
 export const createPet = async (
   petData: Omit<Pet, "id" | "created_at" | "updated_at">
 ) => {

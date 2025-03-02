@@ -1,6 +1,6 @@
 import Banner from "@/components/home/Banner";
 import NewestPetsSection from "@/components/home/NewestPetsSection";
-import { Box, Button, Container, Stack } from "@mui/material";
+import { Button, Container, Stack } from "@mui/material";
 import Link from "next/link";
 
 export default function Home() {
