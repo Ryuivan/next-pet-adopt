@@ -1,7 +1,7 @@
 "use client";
 
 import { RouteType } from "@/types/RouteType";
-import {  Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,7 +10,10 @@ const routes: RouteType[] = [
     name: "Home",
     href: "/",
   },
-  // {}
+  {
+    name: "Pets",
+    href: "/pets",
+  },
 ];
 
 const HeaderRoute = () => {

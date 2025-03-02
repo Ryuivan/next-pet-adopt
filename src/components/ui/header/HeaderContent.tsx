@@ -1,7 +1,7 @@
 "use client";
 
 import LoginButton from "@/components/login/LoginButton";
-import { AppBar, Toolbar, Stack, Container } from "@mui/material";
+import { AppBar, Toolbar, Stack, Container, Box } from "@mui/material";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import Logo from "../logo/Logo";
@@ -36,7 +36,9 @@ const HeaderContent = ({ user, role }: HeaderContentProps) => {
               </Link>
 
               {/* Routes */}
-              <HeaderRoute />
+              <Box>
+                <HeaderRoute />
+              </Box>
 
               {/* User Actions */}
               <Stack direction="row" alignItems="center" spacing={2}>

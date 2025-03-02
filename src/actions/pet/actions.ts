@@ -81,6 +81,16 @@ export const getAllPetsAndUsername = async () => {
   );
 };
 
+export const getNewestPets = async (limit = 5): Promise<Pet[] | null> => {
+  const pets = await getAllPetsAndUsername();
+
+  if (!pets) {
+    return null;
+  }
+
+  return pets.slice(0, limit);
+};
+
 export const getPetById = async (id: string): Promise<Pet | null> => {
   try {
     const supabase = await createClient();
@@ -143,6 +153,27 @@ export const updatePet = async (pet: Partial<Pet>): Promise<boolean> => {
     return true;
   } catch (error) {
     console.error("Error updating pet:", error);
+    return false;
+  }
+};
+
+export const updatePetOwner = async (
+  petId: string,
+  ownerId: string
+): Promise<boolean> => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from("pets")
+      .update({ owner_id: ownerId })
+      .eq("id", petId);
+
+    if (error) throw new Error(error.message);
+
+    return true;
+  } catch (error) {
+    console.error("Error updating pet owner:", error);
     return false;
   }
 };
